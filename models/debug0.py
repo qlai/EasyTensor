@@ -8,7 +8,7 @@ from tensorflow.examples.tutorials.mnist import input_data
 from utils import *
 import train as op
 import multilayer_perceptron as base
-import sys
+import numpy as np
 
 
 if __name__=='__main__':
@@ -25,10 +25,19 @@ if __name__=='__main__':
                                       learning_rate=0.3, dropout = False, \
                                       costfunc = cross_entropy, optimizer='GD')
 
-    log_dir = '/Users/AndyZhang/Cambridge/hack/bins'
-    op.train(model, dataset=mnist, NUM_ITERS=1000, BATCH_SIZE=100,\
-             LOG_DIR=log_dir, KEEP_PROB=1., TEST=True)
+    # model.save()
+    # model = load_model()
 
+    log_dir = '/Users/AndyZhang/Cambridge/hack/bins'
+    save_path = log_dir+'/model_temp.ckpt'
+    op.train(model, dataset=mnist, NUM_ITERS=200, BATCH_SIZE=100,\
+             LOG_DIR=log_dir, KEEP_PROB=1., TEST=True, SAVE_PATH = save_path)
+
+    y = op.predict(model, save_path, mnist.test.images)
+    print(np.shape(y))
+    print(y[0,:])
+    print(np.argmax(y[0,:]))
+    print(np.argmax(y[:5,:],1))
 
 
 
