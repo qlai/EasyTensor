@@ -25,7 +25,7 @@ class Conv_NN(EstBase):
         note train_step'''
         # TODO: add different cost functions
 
-        super(MultiLayerPerceptron, self).__init__(input_dim, output_dim, \
+        super(Conv_NN, self).__init__(input_dim, output_dim, \
                                                    costfunc, learning_rate, optimizer)
 
         self.hidden_dims = hidden_dims
