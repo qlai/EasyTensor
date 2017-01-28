@@ -9,24 +9,23 @@ import tensorflow as tf
 
 from utils import *
 
+from est_base import EstBase
 
-class MultiLayerPerceptron():
-	def __init__(input_dim, output_dim, hidden_layers, activations, learning_rate, dropout = False, costfunc = cross_entropy): 
+
+class MultiLayerPerceptron(EstBase):
+	def __init__(self, input_dim, output_dim, hidden_layers, activations, learning_rate, dropout = False, costfunc = cross_entropy):
 		''' multilayer perceptron class for simple models
 		if dropout == True: feed must include drop out probability named 'keep_prob', else feed includes 'input_data', 'target_data'
 	    hidden_layers and activations are lists of layer dimensions (int) and strings 
 	    note train_step'''
 	    # TODO: add different cost functions
 
+		super(MultiLayerPerceptron, self).__init__(input_dim, output_dim, \
+												   costfunc, learning_rate)
 
-		self.input_dim = input_dim
-		self.output_dim = output_dim
 		self.hidden_layers = hidden_layers
 		self.activations = activations
-		self.costfunc = costfunc
-		self.learning_rate = learning_rate
 		self.dropout = dropout
-
 
 		#define placeholders for data
 		with tf.name_scope('input'):
