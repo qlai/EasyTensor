@@ -11,11 +11,11 @@ from utils import *
 
 
 class MultiLayerPerceptron():
-	def __init__(input_dim, output_dim, hidden_layers, activations, learning_rate, logs_dir, dropout = False, costfunc = cross_entropy): 
+	def __init__(input_dim, output_dim, hidden_layers, activations, learning_rate, dropout = False, costfunc = cross_entropy): 
 		''' multilayer perceptron class for simple models
 		if dropout == True: feed must include drop out probability named 'keep_prob', else feed includes 'input_data', 'target_data'
 	    hidden_layers and activations are lists of layer dimensions (int) and strings 
-	    note train_step, logs_dir'''
+	    note train_step'''
 	    # TODO: add different cost functions
 
 
@@ -26,7 +26,7 @@ class MultiLayerPerceptron():
 		self.costfunc = costfunc
 		self.learning_rate = learning_rate
 		self.dropout = dropout
-		self.logs_dir = logs_dir
+
 
 		#define placeholders for data
 		with tf.name_scope('input'):
@@ -42,8 +42,10 @@ class MultiLayerPerceptron():
 			if i == 0:
 				self.hidden.append(layer(self.input_data, input_dim, hidden_layers[i], \
 								'hidden_{}'.format(i+1), activations[i]))
+
+			# hidden_next = layer(self.hidden_previous, hidden_layers[i-1], hidden_layers[i], 'hidden_#number', activations[i])
 			else:
-				self.hidden.append(layer(hidden[i-1], input_dim, hidden_layers[i], \
+				self.hidden.append(layer(hidden[i-1], hidden_layers[i-1], hidden_layers[i], \
 								'hidden_{}'.format(i+1), activations[i]))
 
 		if dropout:
