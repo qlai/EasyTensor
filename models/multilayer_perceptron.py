@@ -12,7 +12,13 @@ from utils import *
 
 class MultiLayerPerceptron():
 	def __init__(input_dim, output_dim, hidden_layers, activations, learning_rate, dropout = False, costfunc = cross_entropy): 
-	             #hidden layers and activations are lists of layer dimensions (int) and strings
+		''' multilayer perceptron class for simple models
+		if dropout == True: feed must include drop out probability named 'keep_prob', else feed includes 'input_data', 'target_data'
+	    hidden_layers and activations are lists of layer dimensions (int) and strings 
+	    note train_step'''
+	    # TODO: add different cost functions
+	    
+
 		self.input_dim = input_dim
 		self.output_dim = output_dim
 		self.hidden_layers = hidden_layers
