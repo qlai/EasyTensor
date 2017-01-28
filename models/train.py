@@ -40,7 +40,7 @@ def testing(model, dataset, LOG_DIR, TEST_ID =0 ):
     :param model: Qiuyin's model
     :param dataset:
     :param LOG_DIR:
-    :param TEST_ID:
+    :param TEST_ID: to identify the test experiment
     :return:
     '''
     sess = tf.Session()
