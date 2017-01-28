@@ -19,11 +19,12 @@ class MultiLayerPerceptron():
 		self.activations = activations
 		self.costfunc = costfunc
 		self.learning_rate = learning_rate
+		self.dropout = dropout
 
 		#define placeholders for data
 		with tf.name_scope('input'):
 			self.input = tf.placeholder(tf.float64, [None, input_dim], name='input_data')
-		    self.target = tf.placeholder(tf.float64, [None, output_dim], name='output_data')
+		    self.target = tf.placeholder(tf.float64, [None, output_dim], name='target_data')
 
 		#define neural network
 		self.num_layers = len(hidden_layers)
@@ -64,5 +65,4 @@ class MultiLayerPerceptron():
 
 		#define training operation
 		with tf.name_scope('train'):
-		    self.train_step = tf.train.AdamOptimizer(FLAGS.learning_rate).minimize(
-		        self.cost)
+		    self.train_step = tf.train.AdamOptimizer(self.learning_rate).minimize(self.cost)
