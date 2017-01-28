@@ -21,7 +21,7 @@ if __name__=='__main__':
     mnist = input_data.read_data_sets(FLAGS.data_dir, one_hot=True)
 
     model = base.MultiLayerPerceptron(input_dim=784, output_dim=10, \
-                                      hidden_layers=[512], activations=['relu', None], \
+                                      hidden_dims=[512], activations=['relu', None], \
                                       learning_rate=0.3, dropout = False, \
                                       costfunc = cross_entropy, optimizer='GD')
 

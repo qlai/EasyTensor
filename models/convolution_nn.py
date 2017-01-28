@@ -57,7 +57,7 @@ class Conv_NN(EstBase):
 	                	self.hidden.append(utils.perceptron(self.hidden[i-1], self.hidden_dims[i-1], self.hidden_dims[i], \
 	                                'hidden_{}'.format(i+1), self.activations[i]))
 	                else:
-	                	self.hidden.append(utils.flatten(self.hidden[i-1], self.hidden_dims[i-1], self.hidden_dims[i], \
+	                	self.hidden.append(utils.flatten(self.hidden[i-1], self.hidden_dims[i-1], self.hidden_dims[i], self.cnn_count\
 	                                'hidden_{}'.format(i+1), self.activations[i]))	                	
                 else:
                 	self.hidden.append(utils.convolution_layer(self.hidden[i-1], self.input_dim, self.hidden_dims[i], self.hidden_patches[i]\

@@ -13,6 +13,8 @@ def train(model, dataset, NUM_ITERS, BATCH_SIZE, LOG_DIR,\
     :param BATCH_SIZE:  int
     :param LOG_DIR: the directory to log files
     :param KEEP_PROB: dropout probability
+    :param TEST: bool, whether do testing at the end of training
+    :param SAVE_PATH: str, path to save the trained model. None if saving unneeded
     :return:
     '''
     #sess = tf.Session()
@@ -34,7 +36,7 @@ def train(model, dataset, NUM_ITERS, BATCH_SIZE, LOG_DIR,\
         if i % 100 == 99:
             summary, acc = sess.run([model.merged,model.accuracy], feed_dict=fed)
             train_writer.add_summary(summary,i)
-            print('Accuracy at step %s: %s' % (i, acc))
+            print('Accuracy on Training, at step %s: %s' % (i, acc))
     train_writer.close()
 
     if TEST:
@@ -55,10 +57,11 @@ def train(model, dataset, NUM_ITERS, BATCH_SIZE, LOG_DIR,\
 
 def predict( model, model_sess_path, new_x ):
     '''
+    Pre-trained model
     :param model: initialized model instance
     :param model_sess_path:
     :param new_x: new data x to be predicted
-    :return: tensor, model.output
+    :return: numpy.ndarray
     '''
     sess = utils.restore_session(model_sess_path)
     model.dropout = False

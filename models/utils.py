@@ -1,4 +1,5 @@
 import tensorflow as tf
+import math
 
 activation_funcs = {
     'relu' : tf.nn.relu,
@@ -52,8 +53,14 @@ def perceptron(input, input_dim, output_dim, layer_name, act = None, summaries =
 
     return output
 
-def flatten():
-    pass
+def flatten(input, input_channels, output_dim, num_prev_cnn, layer_name, act = None, summaries = True):
+    INPUT_DIM = 28
+    cnn_out_width = INPUT_DIM
+    for i in range(num_prev_cnn):
+        cnn_out_width = math.ceil(cnn_out_width/2.)
+    ## cnn_out_width
+    flattened_input = tf.reshape(input,  [(cnn_out_width**2)*input_channels, output_dim])
+    return perceptron(flattened_input, )
 
 def convolution_layer(input, input_dim, output_dim, patchsize, layer_name, act = 'relu', summaries = True):
     with tf.name_scope(layer_name):
