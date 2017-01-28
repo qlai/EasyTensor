@@ -26,7 +26,7 @@ def layer(input, input_dim, output_dim, layer_name, act = None, summaries = True
     '''simple layer wrapper'''
     with tf.name_scope(layer_name):
         with tf.name_scope('Weights'):
-        weights = weight_variable([input_dim, output_dim])
+            weights = weight_variable([input_dim, output_dim])
             if summaries:
                 variable_summaries(weights)
         with tf.name_scope('biases'):
@@ -35,17 +35,17 @@ def layer(input, input_dim, output_dim, layer_name, act = None, summaries = True
                 variable_summaries(biases)
         with tf.name_scope('output'):
             if act == None:
-                output = tf.matmul(input_tensor, weights) + biases
+                output = tf.matmul(input, weights) + biases
             else:
-                output_ = tf.matmul(input_tensor, weights) + biases
+                output_ = tf.matmul(input, weights) + biases
                 output = map(activation_funcs[act], [output_])[0]
 
     tf.summary.histogram('output', output)
 
     return output
-
+'''
 def conv_layer(input, input_dim, output_dim, layer_name, act = 'relu', summaries = True):
-    ''' conv layer wrapper'''
+    # conv layer wrapper
     with tf.name_scope(layer_name):
         with tf.name_scope('Weights'):
         weights = weight_variable([input_dim, output_dim])
@@ -66,6 +66,7 @@ def conv_layer(input, input_dim, output_dim, layer_name, act = 'relu', summaries
     tf.summary.histogram('output', output)
 
     return output
+'''
 
 def variable_summaries(var):
     """Attach a lot of summaries to a Tensor (for TensorBoard visualization)."""

@@ -3,6 +3,7 @@ from __future__ import division
 from __future__ import print_function
 
 import tensorflow as tf
+import argparse
 from tensorflow.examples.tutorials.mnist import input_data
 from utils import *
 import train as op
@@ -25,9 +26,9 @@ if __name__=='__main__':
                                       costfunc = cross_entropy)
 
     log_dir = '/Users/AndyZhang/Cambridge/hack/bins'
-    op.train(model, dataset=mnist, NUM_ITERS=100, BATCH_SIZE=100,\
-             LOG_DIR=log_dir, KEEP_PROB=1.)
-    op.test(model, dataset=mnist, LOG_DIR=log_dir, TEST_ID = 0)
+    op.train(model, dataset=mnist, NUM_ITERS=200, BATCH_SIZE=100,\
+             LOG_DIR=log_dir, KEEP_PROB=1., TEST=True)
+
 
 
 

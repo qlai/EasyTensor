@@ -1,7 +1,7 @@
 import tensorflow as tf
 
 
-def train(model, dataset, NUM_ITERS, BATCH_SIZE, LOG_DIR, KEEP_PROB=1.):
+def train(model, dataset, NUM_ITERS, BATCH_SIZE, LOG_DIR, KEEP_PROB=1., TEST=False, SAVE=True):
     '''
     Training a model
     :param model: model object defined by Qiuyin
@@ -14,8 +14,10 @@ def train(model, dataset, NUM_ITERS, BATCH_SIZE, LOG_DIR, KEEP_PROB=1.):
     :param KEEP_PROB: dropout probability
     :return:
     '''
-    sess = tf.Session()
-    tf.initialize_all_variables().run()
+    #sess = tf.Session()
+    sess = tf.InteractiveSession()
+    #with tf.Session() as sess:
+    tf.global_variables_initializer().run()
 
     train_writer = tf.summary.FileWriter(LOG_DIR + '/train', sess.graph)
 
@@ -31,22 +33,15 @@ def train(model, dataset, NUM_ITERS, BATCH_SIZE, LOG_DIR, KEEP_PROB=1.):
         if i % 100 == 99:
             summary, acc = sess.run([model.merged,model.accuracy], feed_dict=fed)
             train_writer.add_summary(summary,i)
-            print('Accuracy at step %s: %s' % (acc, i))
+            print('Accuracy at step %s: %s' % (i, acc))
     train_writer.close()
 
+    if TEST:
+        test_writer = tf.summary.FileWriter(LOG_DIR + '/test')
+        test_x, test_labels = dataset.test.images, dataset.test.labels
+        fed = {model.input_data:test_x, model.target_data:test_labels}
+        summary,acc = sess.run([model.merged, model.accuracy], feed_dict=fed)
+        test_writer.add_summary(summary,0)
+        print('Accuracy on testing data : %s' % (acc))
 
-def testing(model, dataset, LOG_DIR, TEST_ID =0 ):
-    '''
-    :param model: Qiuyin's model
-    :param dataset:
-    :param LOG_DIR:
-    :param TEST_ID: to identify the test experiment
-    :return:
-    '''
-    sess = tf.Session()
-    test_writer = tf.summary.FileWriter(LOG_DIR + '/test')
-    test_x, test_labels = dataset.test.images, dataset.test.labels
-    fed = {model.input_data:test_x, model.target_data:test_labels}
-    summary,acc = sess.run([model.merged, model.accuracy], feed_dict=fed)
-    test_writer.add_summary(summary,TEST_ID)
 
