@@ -13,32 +13,56 @@ activation_funcs = {
 }
 
 def weight_variable(shape):
-    """Create a weight variable with appropriate initialization."""
-    initial = tf.truncated_normal(shape, stddev=0.1)
-    return tf.Variable(initial)
+  """Create a weight variable with appropriate initialization."""
+  initial = tf.truncated_normal(shape, stddev=0.1)
+  return tf.Variable(initial)
 
 def bias_variable(shape):
-    """Create a bias variable with appropriate initialization."""
-    initial = tf.constant(0.1, shape=shape)
-    return tf.Variable(initial)
+  """Create a bias variable with appropriate initialization."""
+  initial = tf.constant(0.1, shape=shape)
+  return tf.Variable(initial)
 
 def layer(input, input_dim, output_dim, layer_name, act = None, summaries = True):
 	'''simple layer wrapper'''
 	with tf.name_scope(layer_name):
 		with tf.name_scope('Weights'):
-       		weights = weight_variable([input_dim, output_dim])
-       		if summaries:
-            	variable_summaries(weights)
+      weights = weight_variable([input_dim, output_dim])
+      if summaries:
+     	  variable_summaries(weights)
 		with tf.name_scope('biases'):
-        	biases = bias_variable([output_dim])
-        	if summaries:
-        		variable_summaries(biases)
+      biases = bias_variable([output_dim])
+      if summaries:
+      	variable_summaries(biases)
 		with tf.name_scope('output'):
 			if act == None:
-        		output = tf.matmul(input_tensor, weights) + biases
-        	else:
-        		output_ = tf.matmul(input_tensor, weights) + biases
-        		output = map(activation_funcs[act], [output_])[0]
+        output = tf.matmul(input_tensor, weights) + biases
+      else:
+        output_ = tf.matmul(input_tensor, weights) + biases
+        output = map(activation_funcs[act], [output_])[0]
+
+    tf.summary.histogram('output', output)
+
+    return output
+
+def conv_layer(input, input_dim, output_dim, layer_name, act = 'relu', summaries = True):
+  ''' conv layer wrapper'''
+  with tf.name_scope(layer_name):
+    with tf.name_scope('Weights'):
+      weights = weight_variable([input_dim, output_dim])
+      if summaries:
+        variable_summaries(weights)
+    with tf.name_scope('biases'):
+      biases = bias_variable([output_dim])
+        if summaries:
+          variable_summaries(biases)
+
+    with tf.name_scope('output'):
+      output = tf.matmul(input_tensor, weights) + biases
+      if act == None:
+        
+        else:
+          output_ = tf.matmul(input_tensor, weights) + biases
+          output = map(activation_funcs[act], [output_])[0]
 
     tf.summary.histogram('output', output)
 
