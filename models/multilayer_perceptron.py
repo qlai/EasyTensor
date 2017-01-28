@@ -13,7 +13,10 @@ from est_base import EstBase
 
 
 class MultiLayerPerceptron(EstBase):
-    def __init__(self, input_dim, output_dim, hidden_layers, activations, learning_rate, dropout = False, costfunc = cross_entropy):
+    def __init__(self, input_dim, output_dim, hidden_layers, \
+                 activations, learning_rate, dropout = False, \
+                 costfunc = cross_entropy, optimizer='GD'):
+
         ''' multilayer perceptron class for simple models
         if dropout == True: feed must include drop out probability named 'keep_prob', else feed includes 'input_data', 'target_data'
         hidden_layers and activations are lists of layer dimensions (int) and strings 
@@ -26,7 +29,7 @@ class MultiLayerPerceptron(EstBase):
         self.hidden_layers = hidden_layers
         self.activations = activations
         self.dropout = dropout
-
+        optimizer = optimizer.upper()
         #define placeholders for data
         with tf.name_scope('input'):
             self.input_data = tf.placeholder(tf.float32, [None, input_dim], name='input_data')
@@ -64,7 +67,13 @@ class MultiLayerPerceptron(EstBase):
                 tf.summary.scalar('cost', self.cost)
 
         with tf.name_scope('train'):
-            self.train_step = tf.train.AdamOptimizer(self.learning_rate).minimize(self.cost)
+            if optimizer=='ADAM':
+                self.train_step = tf.train.AdamOptimizer(self.learning_rate).minimize(self.cost)
+            elif optimizer=='GD':
+                self.train_step = tf.train.GradientDescentOptimizer(self.learning_rate).minimize(self.cost)
+            else:# default choice of optimizer to be GD
+                self.train_step = tf.train.GradientDescentOptimizer(self.learning_rate).minimize(self.cost)
+
 
 
         with tf.name_scope('accuracy'):

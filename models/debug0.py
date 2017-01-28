@@ -21,12 +21,12 @@ if __name__=='__main__':
     mnist = input_data.read_data_sets(FLAGS.data_dir, one_hot=True)
 
     model = base.MultiLayerPerceptron(input_dim=784, output_dim=10, \
-                                      hidden_layers=[256,256], activations=['relu', None], \
-                                      learning_rate=0.7, dropout = False, \
-                                      costfunc = cross_entropy)
+                                      hidden_layers=[512], activations=['relu', None], \
+                                      learning_rate=0.3, dropout = False, \
+                                      costfunc = cross_entropy, optimizer='GD')
 
     log_dir = '/Users/AndyZhang/Cambridge/hack/bins'
-    op.train(model, dataset=mnist, NUM_ITERS=200, BATCH_SIZE=100,\
+    op.train(model, dataset=mnist, NUM_ITERS=1000, BATCH_SIZE=100,\
              LOG_DIR=log_dir, KEEP_PROB=1., TEST=True)
 
 
