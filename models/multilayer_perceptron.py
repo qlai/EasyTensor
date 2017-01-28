@@ -69,6 +69,7 @@ class MultiLayerPerceptron(EstBase):
                 tf.summary.scalar('cost', self.cost)
                 
         with tf.name_scope('train'):
+            # self.train_step = utils.get_optimizer(self.learning_rate, self.cost, self.optimizer)
             if optimizer=='ADAM':
                 self.train_step = tf.train.AdamOptimizer(self.learning_rate).minimize(self.cost)
             elif optimizer=='GD':
