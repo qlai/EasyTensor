@@ -67,10 +67,12 @@ def convolution_layer(input, input_dim, output_dim, patchsize, layer_name, act =
                 variable_summaries(biases)
         with tf.name_scope('output'):
             if act == None:
-                output = tf.matmul(input, weights) + biases
+                output = conv2d(input, weights)
+                output = tf.nn.bias_add(output,biases)
                 output = max_pool_2x2(output)
             else:
-                output_ = tf.matmul(input, weights) + biases
+                output = conv2d(input, weights)
+                output = tf.nn.bias_add(output,biases)
                 output = map(activation_funcs[act], [output_])[0]
                 output = max_pool_2x2(output)
 
