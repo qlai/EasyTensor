@@ -22,8 +22,16 @@ def bias_variable(shape):
     initial = tf.constant(0.1, shape=shape)
     return tf.Variable(initial)
 
-def layer(input, input_dim, output_dim, layer_name, act = None, summaries = True):
-    '''simple layer wrapper'''
+def conv2d(x, W):
+  return tf.nn.conv2d(x, W, strides=[1, 1, 1, 1], padding='SAME')
+
+def max_pool_2x2(x):
+  return tf.nn.max_pool(x, ksize=[1, 2, 2, 1],
+                        strides=[1, 2, 2, 1], padding='SAME')
+
+
+def perceptron(input, input_dim, output_dim, layer_name, act = None, summaries = True):
+    '''simple layer wrapper for perceptrons'''
     with tf.name_scope(layer_name):
         with tf.name_scope('Weights'):
             weights = weight_variable([input_dim, output_dim])
@@ -39,6 +47,32 @@ def layer(input, input_dim, output_dim, layer_name, act = None, summaries = True
             else:
                 output_ = tf.matmul(input, weights) + biases
                 output = map(activation_funcs[act], [output_])[0]
+
+    tf.summary.histogram('output', output)
+
+    return output
+
+def flatten():
+    pass
+
+def convolution_layer(input, input_dim, output_dim, patchsize, layer_name, act = 'relu', summaries = True):
+    with tf.name_scope(layer_name):
+        with tf.name_scope('Weights'):
+            weights = weight_variable([patchsize[0], patchsize[1], input_dim, output_dim])
+            if summaries:
+                variable_summaries(weights)
+        with tf.name_scope('biases'):
+            biases = bias_variable([output_dim])
+            if summaries:
+                variable_summaries(biases)
+        with tf.name_scope('output'):
+            if act == None:
+                output = tf.matmul(input, weights) + biases
+                output = max_pool_2x2(output)
+            else:
+                output_ = tf.matmul(input, weights) + biases
+                output = map(activation_funcs[act], [output_])[0]
+                output = max_pool_2x2(output)
 
     tf.summary.histogram('output', output)
 

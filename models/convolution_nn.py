@@ -7,21 +7,26 @@ import sys
 
 import tensorflow as tf
 
-from utils import *
+import utils
 
 from est_base import EstBase
 
 
-class MultiLayerPerceptron(EstBase):
-    def __init__(self, input_dim, output_dim, hidden_types, hidden_dims, activations, learning_rate, dropout = False, costfunc = cross_entropy):
-        ''' multilayer perceptron class for simple models
+class Conv_NN(EstBase):
+    def __init__(self, input_dim, output_dim, hidden_patches, hidden_dims, \
+                 activations, learning_rate, dropout = False, \
+                 costfunc = utils.cross_entropy, optimizer='GD'):
+
+        '''
+
+        multilayer perceptron class for simple models
         if dropout == True: feed must include drop out probability named 'keep_prob', else feed includes 'input_data', 'target_data'
         hidden_dims and activations are lists of layer dimensions (int) and strings 
         note train_step'''
         # TODO: add different cost functions
 
         super(MultiLayerPerceptron, self).__init__(input_dim, output_dim, \
-                                                   costfunc, learning_rate)
+                                                   costfunc, learning_rate, optimizer)
 
         self.hidden_dims = hidden_dims
         self.activations = activations
@@ -39,22 +44,36 @@ class MultiLayerPerceptron(EstBase):
 
         for i in range(self.num_layers):
             if i == 0:
-                self.hidden.append(layer(self.input_data, self.input_dim, self.hidden_dims[i], \
+            	if hidden_patches[i] == None:
+                	self.hidden.append(utils.perceptron(self.input_data, self.input_dim, self.hidden_dims[i], \
                                 'hidden_{}'.format(i+1), self.activations[i]))
-
+                else:
+                	self.hidden.append(utils.convolution_layer(self.input_data, self.input_dim, self.hidden_dims[i], self.hidden_patches[i]\
+                                'hidden_{}'.format(i+1), self.activations[i]))
             # hidden_next = layer(self.hidden_previous, hidden_dims[i-1], hidden_dims[i], 'hidden_#number', activations[i])
             else:
-                self.hidden.append(layer(self.hidden[i-1], self.hidden_dims[i-1], self.hidden_dims[i], \
+            	if hidden_patches[i] == None:
+            		if hidden_patches[i-1] == None:
+	                	self.hidden.append(utils.perceptron(self.hidden[i-1], self.hidden_dims[i-1], self.hidden_dims[i], \
+	                                'hidden_{}'.format(i+1), self.activations[i]))
+	                else:
+	                	self.hidden.append(utils.flatten(self.hidden[i-1], self.hidden_dims[i-1], self.hidden_dims[i], \
+	                                'hidden_{}'.format(i+1), self.activations[i]))	                	
+                else:
+                	self.hidden.append(utils.convolution_layer(self.hidden[i-1], self.input_dim, self.hidden_dims[i], self.hidden_patches[i]\
                                 'hidden_{}'.format(i+1), self.activations[i]))
+
 
         if dropout:
             self.keep_prob = tf.placeholder(tf.float32)
             tf.summary.scalar('dropout_keep_probability', self.keep_prob)
             dropped = tf.nn.dropout(self.hidden[-1], self.keep_prob)
-            self.output = layer(dropped, self.hidden_dims[-1], self.output_dim, 'output_layer')
+
+            self.output = utils.perceptron(dropped, self.hidden_dims[-1], self.output_dim, 'output_layer')
 
         else:
-            self.output = layer(self.hidden[-1], self.hidden_dims[-1], self.output_dim, 'output_layer')
+            self.output = utils.perceptron(self.hidden[-1], self.hidden_dims[-1], self.output_dim, 'output_layer')
+
 
         #def cost with function, real y and output y 
         with tf.name_scope('cost'):
@@ -64,7 +83,13 @@ class MultiLayerPerceptron(EstBase):
                 tf.summary.scalar('cost', self.cost)
 
         with tf.name_scope('train'):
-            self.train_step = tf.train.AdamOptimizer(self.learning_rate).minimize(self.cost)
+            if optimizer=='ADAM':
+                self.train_step = tf.train.AdamOptimizer(self.learning_rate).minimize(self.cost)
+            elif optimizer=='GD':
+                self.train_step = tf.train.GradientDescentOptimizer(self.learning_rate).minimize(self.cost)
+            else:# default choice of optimizer to be GD
+                self.train_step = tf.train.GradientDescentOptimizer(self.learning_rate).minimize(self.cost)
+
 
 
         with tf.name_scope('accuracy'):
