@@ -264,22 +264,26 @@ function init() {
       });
     }
 
-
 }
 
 function toJson() {
     var modelDescription = myDiagram.model.toJson();
     console.log(modelDescription);
+    /*
     var socket = new WebSocket('ws://localhost:5000');
     
     socket.addEventListener('open', function (event) {
     socket.send('Connected successfully!');
+    });
 
     socket.addEventListener('message', function (event) {
       console.log('Message from server', event.data);
     });
 
-    socket.send(JSON.stringify(json));
+    socket.send(JSON.stringify(modelDescription));
+    */
+    var tmp = document.getElementsByName("ModelDescription")[0];
+    tmp.value = stringify(modelDescription);
 }
 
 

@@ -16,7 +16,10 @@
       <div id="myDiagramDiv" style="border: solid 1px black; height: 620px">
       </div>
 </span>
-<button onclick="toJson()"> Generate </button>
-
+<!--<button onclick="toJson()"> Generate </button>]-->
+<form action ="/generate" method="post" onsubmit="toJson()">
+	<input type="hidden" name="ModelDescription">
+	<input type="submit" value="Generate" >
+</form>
 </div>
 </body>
