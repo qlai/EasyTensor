@@ -7,7 +7,7 @@ Helping beginners and students to understand the structure of Tensorflow better 
 This uses MNIST Data as an example. `debug*.py` shows how the models can be trained and used.
 
 Dependencies:
-`tensorflow, jinja2, flask`
+`tensorflow, jinja2, flask, opencv`
 
 Examples:
 - To draw a model use the following on terminal:
