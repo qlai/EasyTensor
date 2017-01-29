@@ -18,6 +18,8 @@ class Recurrent_NN(EstBase):
     			 steps, cell_types, state_dims, \
                  out_activation,\
                  costfunc = utils.cross_entropy, learning_rate = 0.5, optimizer='ADAM'):
+    # (28, 10, 28, ['LSTM', 'LSTM'], [128, 128], 'softmax')
+    # (28, 10, 28, ['LSTM', 'GRU'], [128, 128], 'softmax')
     '''RNN is v. different to perceptron etc. 
     	NOTE: cell_types, state_dims, steps, as new inputs, and only 1 str for out_activation
     '''
