@@ -70,7 +70,7 @@ function init() {
                 { toArrow: "Standard", stroke: null })
             ),
           model: new go.GraphLinksModel([  // specify the contents of the Palette
-            { text: "Input", figure: "Ellipse", fill: "lightgray", para: "Dimension:#\nLearning Rate:#" },
+            { text: "Input", figure: "Ellipse", fill: "lightgray", para: "Dimension:#\nLearning Rate:#\nOptimizer:GD/ADAM" },
             { text: "Output", figure: "Ellipse", fill: "lightgray", para: "Dimension:#" },
             { text: "Perceptron Layer", figure: "RoundedRectangle", fill: "lightyellow" , para: "Dimension:#\nActivation: ReLU/ReLU6/CreLU/ELU/Softplus/Softsign/Sigmoid/Tanh\nmulti:#" },   
             { text: "Convolution Layer", figures: "RoundedRectangle", fill: "lightblue", para: "Patch Size: #*#\nChanel:#\nActivation: ReLU/ReLU6/CreLU/ELU/Softplus/Softsign/Sigmoid/Tanh\nmulti:#"},
