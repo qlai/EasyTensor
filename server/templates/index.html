@@ -3,6 +3,38 @@
 <head>
 <title> Easy Tensor </title>
 <meta charset="UTF-8">
+
+<style type="text/css">
+/*
+   button {
+   		background-color:grey;
+   		color:white;
+        text-align: center;
+        padding: 12px 30px;
+        font-size: 15px;
+        margin:10px 8px;
+        cursor:pointer;
+    }
+*/
+.button {
+    display: inline-block;
+    width: 115px;
+    height: 25px;
+    margin:10px 5px;
+    background: grey;
+    padding: 8px 10px;
+    text-align: center;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    cursor:pointer;
+}
+
+.disableClick{
+    pointer-events: none;
+}
+</style>
+
 <script src="../static/go-debug.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="../static/control.js"></script>
@@ -11,13 +43,20 @@
 <body onload="init()">
 <div id="canvas">
 <span style="display: inline-block; vertical-align: top; padding: 5px; width:25%">
-      <div id="myPaletteDiv" style="border: solid 1px black; height: 620px"></div>
+      <div id="myPaletteDiv" style="border: solid 1px black; height: 530px"></div>
+      <div id="button">
+      	<a href="#" class="button" onclick="toJson()" id="generate" > Generate </a>
+      	<a href="#" class="button" class="disableClick" onclick="downloadJson()" id="download"> Download </a>
+      </div>
+      <!-- 
+      <button onclick="toJson()"> Generate </button>
+      <button onclick="download()"> Download </button>
+  	  -->
 </span>
 <span style="display: inline-block; vertical-align: top; padding: 5px; width:70%">
-      <div id="myDiagramDiv" style="border: solid 1px black; height: 620px">
-      </div>
+    <div id="myDiagramDiv" style="border: solid 1px black; height: 620px">
+    </div>
 </span>
-<button onclick="toJson()"> Generate </button>
 <!--
 <form action ="/generate" method="post" onsubmit="toJson()">
 	<input type="hidden" name="ModelDescription">

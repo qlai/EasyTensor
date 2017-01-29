@@ -70,7 +70,7 @@ function init() {
                 { toArrow: "Standard", stroke: null })
             ),
           model: new go.GraphLinksModel([  // specify the contents of the Palette
-            { text: "Input", figure: "Ellipse", fill: "lightgray", para: "Dimension:#\nLearning Rate:#\nOptimizer:GD/ADAM" },
+            { text: "Input", figure: "Ellipse", fill: "lightgray", para: "Dimension:#*1\nLearning Rate:#\nOptimizer:GD/ADAM" },
             { text: "Output", figure: "Ellipse", fill: "lightgray", para: "Dimension:#" },
             { text: "Perceptron Layer", figure: "RoundedRectangle", fill: "lightyellow" , para: "Dimension:#\nActivation: ReLU/ReLU6/CreLU/ELU/Softplus/Softsign/Sigmoid/Tanh\nmulti:#" },   
             { text: "Convolution Layer", figures: "RoundedRectangle", fill: "lightblue", para: "Patch Size: #*#\nChanel:#\nActivation: ReLU/ReLU6/CreLU/ELU/Softplus/Softsign/Sigmoid/Tanh\nmulti:#"},
@@ -242,9 +242,11 @@ function init() {
 
 }
 
+var modelDescription;
 function toJson() {
-    var modelDescription = myDiagram.model.toJson();
+    modelDescription = myDiagram.model.toJson();
     console.log(modelDescription);
+    alert("A json file has been generated, you can download it now");
     /*
     var socket = new WebSocket('ws://localhost:5000');
     
@@ -269,12 +271,23 @@ function toJson() {
         console.log(e);
       }
     });
+    
+    var download = document.getElementById('download');
+    //jquery(#download).removeClass("disableClick");
+
     /*
     var tmp = document.getElementsByName("ModelDescription")[0];
     tmp.value = JSON.stringify(modelDescription);
     console.log(tmp);
     console.log(tmp.value);
     */
+}
+
+function downloadJson() {
+  var a = document.getElementById('download');
+  //var data = "text/json;charset=uft-8" + encodeURIComponent(JSON.stringify(modelDescription));
+  a.href="data:" + modelDescription;
+  a.download = 'modelDescription.JSON';
 }
 
 
