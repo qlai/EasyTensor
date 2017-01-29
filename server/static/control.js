@@ -1,3 +1,5 @@
+var jquery = jQuery.noConflict();
+
 var $ = go.GraphObject.make;  // for conciseness in defining templates
 
 var myDiagram;
@@ -68,9 +70,11 @@ function init() {
                 { toArrow: "Standard", stroke: null })
             ),
           model: new go.GraphLinksModel([  // specify the contents of the Palette
-            { text: "Input", figure: "Circle", fill: "lightgray", para: "Dimension:#" },
+            { text: "Input", figure: "Circle", fill: "lightgray", para: "Dimension:#\nLearning Rate:#" },
             { text: "Output", figure: "Circle", fill: "lightgray", para: "Dimension:#" },
-            { text: "Layer", figure: "RoundedRectangle", fill: "lightyellow" , para: "Dimension:#\nActivation: ReLU/ReLU6/CreLU/ELU/Softplus/Softsign/Sigmoid/Tanh\nmulti:#" },   
+            { text: "Perceptron Layer", figure: "RoundedRectangle", fill: "lightyellow" , para: "Dimension:#\nActivation: ReLU/ReLU6/CreLU/ELU/Softplus/Softsign/Sigmoid/Tanh\nmulti:#" },   
+            { text: "Convolution Layer", figures: "RoundedRectangle", fill: "lightblue", para: "TODO"},
+            { text: "Recurrent Layer", figures: "RoundedRectangle", fill: "lightgreen", para: "TODO"},
           ], [
             // the Palette also has a disconnected Link, which the user can drag-and-drop
             { points: new go.List(go.Point).addAll([new go.Point(0, 0), new go.Point(30, 0), new go.Point(30, 40), new go.Point(60, 40)]) }
@@ -282,8 +286,23 @@ function toJson() {
 
     socket.send(JSON.stringify(modelDescription));
     */
+    jquery.ajax({
+      url:"/generate",
+      data:JSON.stringify(modelDescription).serialize(),
+      type:POST,
+      success:function(r) {
+        console.log(r);
+      },
+      error:function(e) {
+        console.log(e);
+      }
+    });
+    /*
     var tmp = document.getElementsByName("ModelDescription")[0];
-    tmp.value = stringify(modelDescription);
+    tmp.value = JSON.stringify(modelDescription);
+    console.log(tmp);
+    console.log(tmp.value);
+    */
 }
 
 
