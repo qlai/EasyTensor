@@ -47,7 +47,7 @@ def perceptron(input, input_dim, output_dim, layer_name, act = None, summaries =
                 output = tf.matmul(input, weights) + biases
             else:
                 output_ = tf.matmul(input, weights) + biases
-                output = map(activation_funcs[act], [output_])[0]
+                output = list(map(activation_funcs[act], [output_]))[0]
 
     tf.summary.histogram('output', output)
 
