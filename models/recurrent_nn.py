@@ -16,13 +16,12 @@ from est_base import EstBase
 class Recurrent_NN(EstBase):
     def __init__(self, input_dim, output_dim, \
     			 cell_types, state_dims, \
-                 out_activation,\
+                 out_activation, dropout=False, \
                  costfunc = utils.cross_entropy, learning_rate = 0.5, optimizer='ADAM'):
-    # (28, 10, 28, ['LSTM', 'LSTM'], [128, 128], 'softmax')
-    # (28, 10, 28, ['LSTM', 'GRU'], [128, 128], 'softmax')
-    '''RNN is v. different to perceptron etc. 
-    	NOTE: cell_types, state_dims, steps, as new inputs, and only 1 str for out_activation
-    '''
+                 # (28, 10, 28, ['LSTM', 'LSTM'], [128, 128], 'softmax')
+                 #  (28, 10, 28, ['LSTM', 'GRU'], [128, 128], 'softmax')
+        '''RNN is v. different to perceptron etc.
+    	NOTE: cell_types, state_dims, steps, as new inputs, and only 1 str for out_activation'''
 
         super(Recurrent_NN, self).__init__(input_dim, output_dim, \
                                                    costfunc, learning_rate, optimizer)
@@ -39,7 +38,7 @@ class Recurrent_NN(EstBase):
             self.target_data = tf.placeholder(tf.float32, [None, self.output_dim], name='target_data')
 
         #define neural network
-        self.num_layers = len(hidden_dims)
+        self.num_layers = len(state_dims)
         self.input_data_adj = tf.reshape(self.input_data, [-1, self.steps, self.chunk_size])
 
         self.cells = []
@@ -55,15 +54,20 @@ class Recurrent_NN(EstBase):
 		        	elif c == "LSTM":
 		        		cell = tf.nn.rnn_cell.BasicLSTMCell(state_dims[i])
 		        	elif c == "GRU":
-		        		cell = tf.nn.rnn_cell.BasicGRU(state_dims[i])
+		        		cell = tf.nn.rnn_cell.GRUCell(state_dims[i])
 		        	else:
 		        		warnings.warn('{} is not implemented, using LSTM instead'.format(c))
 
 		        self.cells.append(cell)
 
 	        self.cell = tf.nn.rnn_cell.MultiRNNCell(self.cells)
-        rnn_outputs, final_state = tf.nn.dynamic_rnn(self.cell, self.input_data_adj)
 
+        if cell_types[0] == 'LSTM':
+            init_state = cell.zero_state(self.steps, tf.float32)
+
+            rnn_outputs, final_state = tf.nn.dynamic_rnn(self.cell, self.input_data_adj, initial_state= init_state)
+        else:
+            rnn_outputs, final_state = tf.nn.dynamic_rnn(self.cell, self.input_data_adj, initial_state)
 
         with tf.variable_scope("output"):
             self.output = utils.perceptron(rnn_outputs[-1], self.state_dims[-1], self.output_dim, 'output_layer', act=out_activation)

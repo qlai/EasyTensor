@@ -103,4 +103,4 @@ class ConvNN(EstBase):
         self.merged = tf.summary.merge_all()
 
         #define training operation
-        
+

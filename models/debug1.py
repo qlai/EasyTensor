@@ -9,6 +9,7 @@ from utils import *
 import numpy as np
 import train as op
 import convolution_nn as base
+#import recurrent_nn as base
 
 
 '''
@@ -27,12 +28,13 @@ if __name__=='__main__':
 
 
     ###
-    # for ConvNN training, only here, the arguments are changed
+    # for ConvNN/RNN training, only here, the arguments are changed
     ###
     model = base.ConvNN( (28, 28), output_dim=10, hidden_patches=[(5, 5), (5, 5), None],\
-                         hidden_dims=[32, 64, 500], activations= ['relu', 'relu', 'relu'],\
-                         learning_rate=0.1, optimizer='GD' )
+                        hidden_dims=[32, 64, 500], activations= ['relu', 'relu', 'relu'],\
+                        learning_rate=0.1, optimizer='GD' )
 
+    #model = base.Recurrent_NN( (28,28), 10, ['LSTM', 'GRU'], [128, 128], 'softmax' )
 
     # model = base.MultiLayerPerceptron()
 
