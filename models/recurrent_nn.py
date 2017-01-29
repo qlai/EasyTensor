@@ -16,12 +16,12 @@ from est_base import EstBase
 class Recurrent_NN(EstBase):
     def __init__(self, input_dim, output_dim, \
     			 steps, cell_types, state_dims, \
-                 out_activation, \
-                 costfunc = utils.cross_entropy, optimizer='ADAM'):
+                 out_activation,\
+                 costfunc = utils.cross_entropy, learning_rate = 0.5, optimizer='ADAM'):
     '''RNN is v. different to perceptron etc. 
     	NOTE: cell_types, state_dims, steps, as new inputs, and only 1 str for out_activation
     '''
-    
+
         super(Recurrent_NN, self).__init__(input_dim, output_dim, \
                                                    costfunc, learning_rate, optimizer)
 
