@@ -5,13 +5,15 @@ from __future__ import print_function
 import tensorflow as tf
 import argparse
 from tensorflow.examples.tutorials.mnist import input_data
-import utils
-import train as op
-import multilayer_perceptron as base
+from utils import *
 import numpy as np
+import train as op
+#import convolution_nn as base
+import recurrent_nn as base
+
 
 '''
-Debugging Multilayer_perceptron
+Debugging convolution
 also providing a way of using the libraries
 '''
 
@@ -24,13 +26,17 @@ if __name__=='__main__':
     # loading data object
     mnist = input_data.read_data_sets(FLAGS.data_dir, one_hot=True)
 
-    model = base.MultiLayerPerceptron(input_dim=784, output_dim=10, \
-                                      hidden_dims=[512], activations=['relu', None], \
-                                      learning_rate=0.3, dropout = False, \
-                                      costfunc = utils.cross_entropy, optimizer='GD')
+
+    ###
+    # for ConvNN/RNN training, only here, the arguments are changed
+    ###
+
+    model = base.Recurrent_NN( (28,28), 10, 'LSTM', 128, 2, 'softmax' )
+
+    # model = base.MultiLayerPerceptron()
 
 
-    log_dir = './tmp'
+    log_dir = '/Users/AndyZhang/Cambridge/hack/bins'
     save_path = log_dir+'/model_temp.ckpt'
     op.train(model, dataset=mnist, NUM_ITERS=200, BATCH_SIZE=100,\
              LOG_DIR=log_dir, KEEP_PROB=1., TEST=True, SAVE_PATH = save_path)

@@ -9,14 +9,13 @@ import warnings
 import tensorflow as tf
 
 import utils
-
 from est_base import EstBase
 
 
 class Recurrent_NN(EstBase):
     def __init__(self, input_dim, output_dim, \
     			 cell_type, cell_dim, num_layers, \
-                 out_activation,\
+                 out_activation, dropout=False,\
                  costfunc = utils.cross_entropy, learning_rate = 0.5, optimizer='ADAM'):
                  # (28, 10, 28, ['LSTM', 'LSTM'], [128, 128], 'softmax')
                  #  (28, 10, 28, ['LSTM', 'GRU'], [128, 128], 'softmax')
@@ -30,6 +29,7 @@ class Recurrent_NN(EstBase):
 
         self.steps = input_dim[0]
         self.chunk_size = input_dim[1]
+        self.cell_type = cell_type
 
 
         #define placeholders for data
@@ -38,20 +38,20 @@ class Recurrent_NN(EstBase):
             self.target_data = tf.placeholder(tf.float32, [None, self.output_dim], name='target_data')
 
         #define neural network
-        self.num_layers = len(state_dims)
+        self.num_layers = num_layers
         self.input_data_adj = tf.reshape(self.input_data, [-1, self.steps, self.chunk_size])
         self.cell_type = cell_type
         self.cell_dim = cell_dim
 
         with tf.name_scope("RNN"):
-	        if self.cell_type == "BASIC":
-	        	cell = tf.nn.rnn_cell.BasicRNNCell(cell_dim)
-	        elif self.cell_type == "LSTM":
-	        	cell = tf.nn.rnn_cell.BasicLSTMCell(cell_dim)
-	        elif self.cell_type == "GRU":
-	        	cell = tf.nn.rnn_cell.BasicGRU(cell_dim)
-	        else:
-	        	warnings.warn('{} is not implemented, using LSTM instead'.format(self.cell_type))
+            if self.cell_type == "BASIC":
+                cell = tf.nn.rnn_cell.BasicRNNCell(cell_dim)
+            elif self.cell_type == "LSTM":
+                cell = tf.nn.rnn_cell.BasicLSTMCell(cell_dim)
+            elif self.cell_type == "GRU":
+                cell = tf.nn.rnn_cell.BasicGRU(cell_dim)
+            else:
+                warnings.warn('{} is not implemented, using LSTM instead'.format(self.cell_type))
                 cell = tf.nn.rnn_cell.BasicLSTMCell(cell_dim)
 
             if self.cell_type == 'BASIC' or self.cell_type == 'GRU':
@@ -59,7 +59,7 @@ class Recurrent_NN(EstBase):
             else:
                 self.cell = tf.nn.rnn_cell.MultiRNNCell([cell] * num_layers)
 
-        rnn_outputs, final_state = tf.nn.rnn(self.cell, self.input_data_adj)
+        rnn_outputs, final_state = tf.contrib.rnn.static_rnn(self.cell, self.input_data_adj, dtype=tf.float32)
 
         with tf.variable_scope("output"):
             self.output = utils.perceptron(rnn_outputs[-1], self.state_dims[-1], self.output_dim, 'output_layer', act=out_activation)
