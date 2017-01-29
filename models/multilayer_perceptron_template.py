@@ -86,7 +86,7 @@ class MultiLayerPerceptron(EstBase):
 
         with tf.name_scope('accuracy'):
             with tf.name_scope('correct_prediction'):
-                correct_prediction = tf.equal(tf.argmax(self.output, 1), tf.argmax(self.target, 1))
+                correct_prediction = tf.equal(tf.argmax(self.output, 1), tf.argmax(self.target_data, 1))
             with tf.name_scope('accuracy'):
                 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
         tf.summary.scalar('accuracy', accuracy)
