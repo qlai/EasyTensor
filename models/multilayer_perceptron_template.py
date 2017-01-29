@@ -88,8 +88,8 @@ class MultiLayerPerceptron(EstBase):
             with tf.name_scope('correct_prediction'):
                 correct_prediction = tf.equal(tf.argmax(self.output, 1), tf.argmax(self.target_data, 1))
             with tf.name_scope('accuracy'):
-                accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
-        tf.summary.scalar('accuracy', accuracy)
+                self.accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+        tf.summary.scalar('accuracy', self.accuracy)
         self.merged = tf.summary.merge_all()
 
         #define training operation
