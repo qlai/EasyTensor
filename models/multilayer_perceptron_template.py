@@ -43,7 +43,7 @@ class MultiLayerPerceptron(EstBase):
         {% else %}
         {% for i in range(layer_num) %} {% if i == 0 %}
         hidden_layer_{{ i + 1 }} = utils.perceptron(self.input_data, self.input_dim, self.hidden_dims[{{i}}], \
-                                'hidden_{}'.format({{ i }}), self.activations[{{ i }}])
+                                'hidden_{}'.format({{ i + 1 }}), self.activations[{{ i }}])
         {% elif i == layer_num - 1 %}
         hidden_layer_last = utils.perceptron(hidden_layer_{{ i }}, self.hidden_dims[{{i - 1}}], \
                                                self.hidden_dims[{{i}}], 'hidden_{}'.format({{i + 1}}), self.activations[{{i}}])
