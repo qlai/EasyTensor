@@ -7,7 +7,7 @@ import argparse
 from tensorflow.examples.tutorials.mnist import input_data
 import utils
 import train as op
-import multilayer_perceptron as base
+import multilayer_perceptron_output as base
 import numpy as np
 
 '''
@@ -24,12 +24,13 @@ if __name__=='__main__':
     # loading data object
     mnist = input_data.read_data_sets(FLAGS.data_dir, one_hot=True)
 
-    model = base.MultiLayerPerceptron(input_dim=784, output_dim=10, \
-                                      hidden_dims=[512], activations=['relu', None], \
-                                      learning_rate=0.3, dropout = False, \
-                                      costfunc = utils.cross_entropy, optimizer='GD')
-
-
+#    model = base.MultiLayerPerceptron(input_dim=784, output_dim=10, \
+#                                      hidden_dims=[512], activations=['relu', None], \
+#                                      learning_rate=0.3, dropout = False, \
+#                                      costfunc = utils.cross_entropy, optimizer='GD')
+#
+#
+    model = base.MultiLayerPerceptron()
     log_dir = './tmp'
     save_path = log_dir+'/model_temp.ckpt'
     op.train(model, dataset=mnist, NUM_ITERS=200, BATCH_SIZE=100,\
