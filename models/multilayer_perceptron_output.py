@@ -23,10 +23,10 @@ class MultiLayerPerceptron(EstBase):
         # costfunc default to be cross_entropy
         super(MultiLayerPerceptron, self).__init__(784, 10, \
                                                    utils.cross_entropy, 0.3, \
-                                                   'ADAM')
+                                                   'GD')
 
-        self.hidden_dims = [2, 2, 2]
-        self.activations = [u'relu', u'relu', u'relu']
+        self.hidden_dims = [256, 256, 128]
+        self.activations = [u'relu', u'relu', u'tanh']
         self.dropout = False
 
         #define placeholders for data
@@ -37,6 +37,7 @@ class MultiLayerPerceptron(EstBase):
         #define neural network
         self.num_layers = len(self.hidden_dims)
 
+        
          
         hidden_layer_1 = utils.perceptron(self.input_data, self.input_dim, self.hidden_dims[0], \
                                 'hidden_{}'.format(0), self.activations[0])
@@ -46,7 +47,7 @@ class MultiLayerPerceptron(EstBase):
           
         hidden_layer_last = utils.perceptron(hidden_layer_2, self.hidden_dims[1], \
                                                self.hidden_dims[2], 'hidden_{}'.format(3), self.activations[2])
-         
+          
 
         # for i in range(self.num_layers):
         # 	if i == 0:

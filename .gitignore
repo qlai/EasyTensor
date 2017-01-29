@@ -1,2 +1,5 @@
 **/.idea/
 *.pyc
+**/models/tmp/*
+**/models/*output.py
+**/models/*demo*

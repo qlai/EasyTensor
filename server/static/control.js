@@ -73,7 +73,7 @@ function init() {
             { text: "Input", figure: "Ellipse", fill: "lightgray", para: "Dimension:#*1\nLearning Rate:#\nOptimizer:GD/ADAM" },
             { text: "Output", figure: "Ellipse", fill: "lightgray", para: "Dimension:#" },
             { text: "Perceptron Layer", figure: "RoundedRectangle", fill: "lightyellow" , para: "Dimension:#\nActivation: ReLU/ReLU6/CreLU/ELU/Softplus/Softsign/Sigmoid/Tanh\nmulti:#" },   
-            { text: "Convolution Layer", figures: "RoundedRectangle", fill: "lightblue", para: "Patch Size: #*#\nChanel:#\nActivation: ReLU/ReLU6/CreLU/ELU/Softplus/Softsign/Sigmoid/Tanh\nmulti:#"},
+            { text: "Convolution Layer", figures: "RoundedRectangle", fill: "lightblue", para: "Patch Size: #*#\nChannel:#\nActivation: ReLU/ReLU6/CreLU/ELU/Softplus/Softsign/Sigmoid/Tanh\nmulti:#"},
             { text: "Recurrent Layer", figures: "RoundedRectangle", fill: "lightgreen", para: "Cell Type: LSTM/FRU/Basic\nCell Size:#\nBatch Size:#\nMulti:#"},
           ], [
             // the Palette also has a disconnected Link, which the user can drag-and-drop
