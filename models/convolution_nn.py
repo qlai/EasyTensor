@@ -30,6 +30,8 @@ class ConvNN(EstBase):
                                                    costfunc, learning_rate, optimizer)
 
         self.input_x_dim, self.input_y_dim = self.input_dim
+        self.input_dim = self.input_dim[0]*self.input_dim[1]
+        self.hidden_patches = hidden_patches
 
         self.hidden_dims = hidden_dims
         self.activations = activations
@@ -45,20 +47,21 @@ class ConvNN(EstBase):
 
         self.hidden = []
         self.cnn_count = 0
+        self.input_data_adj = tf.reshape( self.input_data, shape=[-1,self.input_x_dim, self.input_y_dim, 1])
 
         for i in range(self.num_layers):
             if i == 0:
-            	self.hidden.append(utils.convolution_layer(self.input_data, 1, self.hidden_dims[i], self.hidden_patches[i]\
+                self.hidden.append(utils.convolution_layer(self.input_data_adj, 1, self.hidden_dims[i], self.hidden_patches[i],\
                                 'hidden_{}'.format(i+1), self.activations[i]))
                 self.cnn_count += 1
             # hidden_next = layer(self.hidden_previous, hidden_dims[i-1], hidden_dims[i], 'hidden_#number', activations[i])
             else:
-            	if hidden_patches[i] == None:
-            		self.hidden.append(utils.flatten(self.hidden[i-1], self.hidden_dims[i-1], self.hidden_dims[i], self.cnn_count, self.input_x_dim, self.input_y_dim,\
-	                                'hidden_{}'.format(i+1), self.activations[i]))	  
+                if hidden_patches[i] == None:
+                    self.hidden.append(utils.flatten(self.hidden[i-1], self.hidden_dims[i-1], self.hidden_dims[i], self.cnn_count, self.input_x_dim, self.input_y_dim,\
+	                                'hidden_{}'.format(i+1), self.activations[i]))
                     self.cnn_count = 0              	
                 else:
-                    self.hidden.append(utils.convolution_layer(self.hidden[i-1], self.input_dim, self.hidden_dims[i], self.hidden_patches[i],\
+                    self.hidden.append(utils.convolution_layer(self.hidden[i-1], self.hidden_dims[i-1], self.hidden_dims[i], self.hidden_patches[i],\
                                 'hidden_{}'.format(i+1), self.activations[i]))
                     self.cnn_count += 1
 
