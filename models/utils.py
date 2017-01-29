@@ -84,7 +84,7 @@ def convolution_layer(input, input_dim, output_dim, patchsize, layer_name, act =
             else:
                 output = conv2d(input, weights)
                 output = tf.nn.bias_add(output,biases)
-                output = map(activation_funcs[act], [output])[0]
+                output = list(map(activation_funcs[act], [output]))[0]
                 output = max_pool_2x2(output)
 
     tf.summary.histogram('output', output)
