@@ -16,6 +16,8 @@ Examples:
   to launch drawer on localhost
 - Click `generate` on the webpage to generate model file out local directory, this will output a file in 'models' directory in the format `[model_type]_output.py`
 - Follow template on `debug0` for a MultiLayerPerceptron Model, `debug1` to run a CNN Model
+- Launch Tensorboard using `tensorboard --logdir='[your dir]'` to visualize in TF graph to check correctness
+- use `models/predict.py` to predict new digit images
 
 Further Instructions:
 - You must use a perceptron model after layers of CNN for flattening before output layer
