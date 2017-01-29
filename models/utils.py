@@ -61,8 +61,8 @@ def flatten(input, input_channels, output_dim, num_prev_cnn, x_dim, y_dim, layer
         cnn_out_width = math.ceil(cnn_out_width/2.)
         cnn_out_length = math.ceil(cnn_out_length/2.)
     ## cnn_out_width
-    flattened_dim =(cnn_out_width*cnn_out_length)*input_channels, output_dim
-    flattened_input = tf.reshape(input,  [flattened_dim])
+    flattened_dim = int( (cnn_out_width*cnn_out_length)*input_channels )
+    flattened_input = tf.reshape(input,  [-1,flattened_dim])
     return perceptron(flattened_input, flattened_dim, output_dim, layer_name, act = act, summaries = summaries)
 
 
@@ -84,7 +84,7 @@ def convolution_layer(input, input_dim, output_dim, patchsize, layer_name, act =
             else:
                 output = conv2d(input, weights)
                 output = tf.nn.bias_add(output,biases)
-                output = map(activation_funcs[act], [output_])[0]
+                output = map(activation_funcs[act], [output])[0]
                 output = max_pool_2x2(output)
 
     tf.summary.histogram('output', output)

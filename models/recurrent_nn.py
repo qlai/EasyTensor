@@ -45,25 +45,23 @@ class Recurrent_NN(EstBase):
         self.state_dims = state_dims
 
         with tf.name_scope("RNN"):
+            for i, c in enumerate(cell_types):
+                with tf.name_scope("hidden_layer_{}".format(i)):
+                    if c == "BASIC":
+                        cell = tf.nn.rnn_cell.BasicRNNCell(state_dims[i])
+                    elif c == "LSTM":
+                        cell = tf.nn.rnn_cell.BasicLSTMCell(state_dims[i])
+                    elif c == "GRU":
+                        cell = tf.nn.rnn_cell.BasicGRU(state_dims[i])
+                    else:
+                        warnings.warn('{} is not implemented, using LSTM instead'.format(c))
+                self.cells.append(cell)
 
-	        for i, c in enumerate(cell_types):
-	        	with tf.name_scope("hidden_layer_{}".format(i)):
-		        	if c == "BASIC":
-		        		cell = tf.nn.rnn_cell.BasicRNNCell(state_dims[i])
-		        	elif c == "LSTM":
-		        		cell = tf.nn.rnn_cell.BasicLSTMCell(state_dims[i])
-		        	elif c == "GRU":
-		        		cell = tf.nn.rnn_cell.BasicGRU(state_dims[i])
-		        	else:
-		        		warnings.warn('{} is not implemented, using LSTM instead'.format(c))
-
-		        self.cells.append(cell)
-
-	        self.cell = tf.nn.rnn_cell.MultiRNNCell(self.cells)
+            self.cell = tf.nn.rnn_cell.MultiRNNCell(self.cells)
         rnn_outputs, final_state = tf.nn.dynamic_rnn(self.cell, self.input_data)
 
         with tf.variable_scope("output"):
-        	self.output = utils.perceptron(rnn_outputs[-1], self.state_dims[-1], self.output_dim, 'output_layer', act=out_activation)
+            self.output = utils.perceptron(rnn_outputs[-1], self.state_dims[-1], self.output_dim, 'output_layer', act=out_activation)
 
 
         with tf.name_scope('cost'):
