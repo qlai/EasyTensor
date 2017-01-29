@@ -15,7 +15,7 @@ from est_base import EstBase
 
 class Recurrent_NN(EstBase):
     def __init__(self, input_dim, output_dim, \
-    			 steps, cell_types, state_dims, \
+    			 cell_types, state_dims, \
                  out_activation,\
                  costfunc = utils.cross_entropy, learning_rate = 0.5, optimizer='ADAM'):
     # (28, 10, 28, ['LSTM', 'LSTM'], [128, 128], 'softmax')
@@ -27,18 +27,20 @@ class Recurrent_NN(EstBase):
         super(Recurrent_NN, self).__init__(input_dim, output_dim, \
                                                    costfunc, learning_rate, optimizer)
 
-
         self.dropout = dropout
 
-        self.steps = steps
+        self.steps = input_dim[0]
+        self.chunk_size = input_dim[1]
+
+
         #define placeholders for data
         with tf.name_scope('input'):
-            self.input_data = tf.placeholder(tf.float32, [None, self.steps, self.input_dim], name='input_data')
+            self.input_data = tf.placeholder(tf.float32, [None, self.input_dim[0]*self.input_dim[1]], name='input_data')
             self.target_data = tf.placeholder(tf.float32, [None, self.output_dim], name='target_data')
 
         #define neural network
         self.num_layers = len(hidden_dims)
-
+        self.input_data_adj = tf.reshape(self.input_data, [-1, self.steps, self.chunk_size])
 
         self.cells = []
         self.cell_types = cell_types
@@ -60,7 +62,7 @@ class Recurrent_NN(EstBase):
 		        self.cells.append(cell)
 
 	        self.cell = tf.nn.rnn_cell.MultiRNNCell(self.cells)
-        rnn_outputs, final_state = tf.nn.dynamic_rnn(self.cell, self.input_data)
+        rnn_outputs, final_state = tf.nn.dynamic_rnn(self.cell, self.input_data_adj)
 
         with tf.variable_scope("output"):
         	self.output = utils.perceptron(rnn_outputs[-1], self.state_dims[-1], self.output_dim, 'output_layer', act=out_activation)
