@@ -288,8 +288,8 @@ function toJson() {
     */
     jquery.ajax({
       url:"/generate",
-      data:JSON.stringify(modelDescription).serialize(),
-      type:POST,
+      data:'modelDescription=' + modelDescription,
+      type:"POST",
       success:function(r) {
         console.log(r);
       },
