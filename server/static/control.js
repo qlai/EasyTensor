@@ -70,10 +70,10 @@ function init() {
                 { toArrow: "Standard", stroke: null })
             ),
           model: new go.GraphLinksModel([  // specify the contents of the Palette
-            { text: "Input", figure: "Circle", fill: "lightgray", para: "Dimension:#\nLearning Rate:#" },
-            { text: "Output", figure: "Circle", fill: "lightgray", para: "Dimension:#" },
+            { text: "Input", figure: "Ellipse", fill: "lightgray", para: "Dimension:#\nLearning Rate:#" },
+            { text: "Output", figure: "Ellipse", fill: "lightgray", para: "Dimension:#" },
             { text: "Perceptron Layer", figure: "RoundedRectangle", fill: "lightyellow" , para: "Dimension:#\nActivation: ReLU/ReLU6/CreLU/ELU/Softplus/Softsign/Sigmoid/Tanh\nmulti:#" },   
-            { text: "Convolution Layer", figures: "RoundedRectangle", fill: "lightblue", para: "TODO"},
+            { text: "Convolution Layer", figures: "RoundedRectangle", fill: "lightblue", para: "Patch Size: #*#\nChanel:#\nActivation: ReLU/ReLU6/CreLU/ELU/Softplus/Softsign/Sigmoid/Tanh\nmulti:#"},
             { text: "Recurrent Layer", figures: "RoundedRectangle", fill: "lightgreen", para: "TODO"},
           ], [
             // the Palette also has a disconnected Link, which the user can drag-and-drop
@@ -130,7 +130,7 @@ function init() {
               new go.Binding("text").makeTwoWay()),
             $(go.Panel, "Vertical",
                   { visible: true },  // not visible unless there is more than one action
-                  new go.Binding("visible",'para'),
+                  new go.Binding("visible","para"),
                   /*
                   new go.Binding("visible", "para", function(acts) {
                     return (Array.isArray(acts) && acts.length > 0);
@@ -151,11 +151,12 @@ function init() {
                   // with the list data bound in the Vertical Panel
                   $(go.TextBlock,
                     { name: "COLLAPSIBLE",  // identify to the PanelExpanderButton
+                      visible: false,
                       stretch: go.GraphObject.Horizontal,  // take up whole available width
                       background: "white",  // to distinguish from the node's body
                       editable: true
                     },
-                    new go.Binding("text", "para")  // bind TextBlock.text to nodedata.para
+                    new go.Binding("text", "para").makeTwoWay()  // bind TextBlock.text to nodedata.para
                   )  // end action list Vertical Panel
               )  // end optional Vertical Panel
           )
@@ -171,41 +172,6 @@ function init() {
           mouseLeave: function(e, node) { showSmallPorts(node, false); }
         }
       );
-    
-
-    /*
-    myDiagram.groupTemplate =
-    $(go.Group, "Auto",
-      { layout: $(go.LayeredDigraphLayout,
-                  { direction: 0, columnSpacing: 10 }) },
-      { isSubGraphExpanded: false },
-      $(go.Shape, "RoundedRectangle", // surrounds everything
-        { parameter1: 10}),
-      $(go.Panel, "Vertical",  // position header above the subgraph
-        { defaultAlignment: go.Spot.Left },
-        $(go.Panel, "Horizontal",  // the header
-          { defaultAlignment: go.Spot.Top },
-          $("SubGraphExpanderButton"),  // this Panel acts as a Button
-          $(go.TextBlock,     // group title near top, next to button
-            { font: "Bold 12pt Sans-Serif" },
-            new go.Binding("text", "key"))
-        ),
-        $(go.Placeholder,     // represents area for all member parts
-          { padding: new go.Margin(0, 10), background: "white" })
-      )
-
-
-      // four small named ports, one on each side:
-        makePort("T", go.Spot.Top, false, true),
-        makePort("L", go.Spot.Left, true, true),
-        makePort("R", go.Spot.Right, true, true),
-        makePort("B", go.Spot.Bottom, true, false),
-        { // handle mouse enter/leave events to show/hide the ports
-          mouseEnter: function(e, node) { showSmallPorts(node, true); },
-          mouseLeave: function(e, node) { showSmallPorts(node, false); }
-        }
-    );
-*/
 
 
     myDiagram.linkTemplate =
@@ -216,15 +182,21 @@ function init() {
           routing: go.Link.AvoidsNodes,
           curve: go.Link.JumpOver,
           corner: 5,
-          toShortLength: 4
+          toShortLength: 4,
+          relinkableTo: true,
+          relinkableFrom: true,
+          reshapable: true,
+          resegmentable: true
         },
         new go.Binding("points").makeTwoWay(),
         $(go.Shape,  // the link path shape
           { isPanelMain: true, strokeWidth: 2 }),
         $(go.Shape,  // the arrowhead
           { toArrow: "Standard", stroke: null }),
-        $(go.Panel, "Auto",
-          new go.Binding("visible", "isSelected").ofObject(),
+        $(go.Panel, "Auto", //the link label, normally not visible
+          { visible: false, name:"LABEL", segmentIndex: 2,segmentFraction:0.5},
+          //new go.Binding("visible", "isSelected").ofObject(),
+          new go.Binding("visible","visible").makeTwoWay(),
           $(go.Shape, "RoundedRectangle",  // the link shape
             { fill: "#F8F8F8", stroke: null }),
           $(go.TextBlock,
