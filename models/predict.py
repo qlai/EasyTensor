@@ -30,15 +30,20 @@ def predict_by_modelMLP(model_path, test_images):
     return y
 
 
-if __main__ == '__main__':
+if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--model_path', type=str, help='path to the pre-trained model .ckpt file')
     parser.add_argument('--image_path', type=str, help='path to the images to be tested')
     FLAGS, unparsed = parser.parse_known_args()
+    # test
     test_images = cv2.imread(FLAGS.image_path, cv2.IMREAD_GRAYSCALE)
+    test_images = test_images.flatten()
     test_images = test_images/255
+    test_images = 1 - test_images
+    test_images = test_images[np.newaxis, :]
     y = predict_by_modelMLP(FLAGS.model_path, test_images)
-    print(y)
+    result = np.argmax(y, 1)
+    print(result)
 
 
 
