@@ -13,9 +13,9 @@ function init() {
           allowDrop: true,  // must be true to accept drops from the Palette
           "draggingTool.dragsLink": true,
           "draggingTool.isGridSnapEnabled": true,
-          "linkingTool.isUnconnectedLinkValid": true,
+          //"linkingTool.isUnconnectedLinkValid": true,
           "linkingTool.portGravity": 20,
-          "relinkingTool.isUnconnectedLinkValid": true,
+          //"relinkingTool.isUnconnectedLinkValid": true,
           "relinkingTool.portGravity": 20,
           "relinkingTool.fromHandleArchetype":
             $(go.Shape, "Diamond", { segmentIndex: 0, cursor: "pointer", desiredSize: new go.Size(8, 8), fill: "tomato", stroke: "darkred" }),
@@ -183,6 +183,8 @@ function init() {
           curve: go.Link.JumpOver,
           corner: 5,
           toShortLength: 4,
+          fromLinkable: true,
+          toLinkable: true,
           relinkableTo: true,
           relinkableFrom: true,
           reshapable: true,
