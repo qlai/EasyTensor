@@ -54,13 +54,14 @@ def perceptron(input, input_dim, output_dim, layer_name, act = None, summaries =
     return output
 
 
-def flatten(input, input_channels, output_dim, num_prev_cnn, layer_name, act = None, summaries = True):
-    INPUT_DIM = 28
-    cnn_out_width = INPUT_DIM
+def flatten(input, input_channels, output_dim, num_prev_cnn, x_dim, y_dim, layer_name, act = None, summaries = True):
+    cnn_out_width = x_dim
+    cnn_out_length = y_dim
     for i in range(num_prev_cnn):
         cnn_out_width = math.ceil(cnn_out_width/2.)
+        cnn_out_length = math.ceil(cnn_out_length/2.)
     ## cnn_out_width
-    flattened_dim =(cnn_out_width**2)*input_channels, output_dim
+    flattened_dim =(cnn_out_width*cnn_out_length)*input_channels, output_dim
     flattened_input = tf.reshape(input,  [flattened_dim])
     return perceptron(flattened_input, flattened_dim, output_dim, layer_name, act = act, summaries = summaries)
 
