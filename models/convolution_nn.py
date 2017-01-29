@@ -25,7 +25,7 @@ class Conv_NN(EstBase):
         note train_step'''
         # TODO: add different cost functions
 
-        super(MultiLayerPerceptron, self).__init__(input_dim, output_dim, \
+        super(Conv_NN, self).__init__(input_dim, output_dim, \
                                                    costfunc, learning_rate, optimizer)
 
         self.hidden_dims = hidden_dims
@@ -41,27 +41,23 @@ class Conv_NN(EstBase):
         self.num_layers = len(hidden_dims)
 
         self.hidden = []
+        self.cnn_count = 0
 
         for i in range(self.num_layers):
             if i == 0:
-            	if hidden_patches[i] == None:
-                	self.hidden.append(utils.perceptron(self.input_data, self.input_dim, self.hidden_dims[i], \
+            	self.hidden.append(utils.convolution_layer(self.input_data, 1, self.hidden_dims[i], self.hidden_patches[i]\
                                 'hidden_{}'.format(i+1), self.activations[i]))
-                else:
-                	self.hidden.append(utils.convolution_layer(self.input_data, self.input_dim, self.hidden_dims[i], self.hidden_patches[i]\
-                                'hidden_{}'.format(i+1), self.activations[i]))
+                self.cnn_count += 1
             # hidden_next = layer(self.hidden_previous, hidden_dims[i-1], hidden_dims[i], 'hidden_#number', activations[i])
             else:
             	if hidden_patches[i] == None:
-            		if hidden_patches[i-1] == None:
-	                	self.hidden.append(utils.perceptron(self.hidden[i-1], self.hidden_dims[i-1], self.hidden_dims[i], \
-	                                'hidden_{}'.format(i+1), self.activations[i]))
-	                else:
-	                	self.hidden.append(utils.flatten(self.hidden[i-1], self.hidden_dims[i-1], self.hidden_dims[i], \
-	                                'hidden_{}'.format(i+1), self.activations[i]))	                	
+            		self.hidden.append(utils.flatten(self.hidden[i-1], self.hidden_dims[i-1], self.hidden_dims[i], self.cnn_count,\
+	                                'hidden_{}'.format(i+1), self.activations[i]))	  
+                    self.cnn_count = 0              	
                 else:
-                	self.hidden.append(utils.convolution_layer(self.hidden[i-1], self.input_dim, self.hidden_dims[i], self.hidden_patches[i]\
+                    self.hidden.append(utils.convolution_layer(self.hidden[i-1], self.input_dim, self.hidden_dims[i], self.hidden_patches[i],\
                                 'hidden_{}'.format(i+1), self.activations[i]))
+                    self.cnn_count += 1
 
 
         if dropout:

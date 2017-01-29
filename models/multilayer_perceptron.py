@@ -15,7 +15,7 @@ from est_base import EstBase
 class MultiLayerPerceptron(EstBase):
     def __init__(self, input_dim, output_dim, hidden_dims, \
                  activations, learning_rate, dropout = False, \
-                 costfunc = utils.cross_entropy, optimizer='GD'):
+                 costfunc = utils.cross_entropy, optimizer='ADAM'):
 
         ''' multilayer perceptron class for simple models
         if dropout == True: feed must include drop out probability named 'keep_prob', else feed includes 'input_data', 'target_data'
