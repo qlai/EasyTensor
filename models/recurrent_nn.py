@@ -15,7 +15,7 @@ from est_base import EstBase
 
 class Recurrent_NN(EstBase):
     def __init__(self, input_dim, output_dim, \
-    			 cell_types, state_dims, \
+    			 cell_type, cell_dim, num_layers, \
                  out_activation,\
                  costfunc = utils.cross_entropy, learning_rate = 0.5, optimizer='ADAM'):
     # (28, 10, 28, ['LSTM', 'LSTM'], [128, 128], 'softmax')
@@ -41,28 +41,27 @@ class Recurrent_NN(EstBase):
         #define neural network
         self.num_layers = len(hidden_dims)
         self.input_data_adj = tf.reshape(self.input_data, [-1, self.steps, self.chunk_size])
-
-        self.cells = []
-        self.cell_types = cell_types
-        self.state_dims = state_dims
+        self.cell_type = cell_type
+        self.cell_dim = cell_dim
 
         with tf.name_scope("RNN"):
 
-	        for i, c in enumerate(cell_types):
-	        	with tf.name_scope("hidden_layer_{}".format(i)):
-		        	if c == "BASIC":
-		        		cell = tf.nn.rnn_cell.BasicRNNCell(state_dims[i])
-		        	elif c == "LSTM":
-		        		cell = tf.nn.rnn_cell.BasicLSTMCell(state_dims[i])
-		        	elif c == "GRU":
-		        		cell = tf.nn.rnn_cell.BasicGRU(state_dims[i])
-		        	else:
-		        		warnings.warn('{} is not implemented, using LSTM instead'.format(c))
+	        if self.cell_type == "BASIC":
+	        	cell = tf.nn.rnn_cell.BasicRNNCell(cell_dim)
+	        elif self.cell_type == "LSTM":
+	        	cell = tf.nn.rnn_cell.BasicLSTMCell(cell_dim)
+	        elif self.cell_type == "GRU":
+	        	cell = tf.nn.rnn_cell.BasicGRU(cell_dim)
+	        else:
+	        	warnings.warn('{} is not implemented, using LSTM instead'.format(self.cell_type))
+                cell = tf.nn.rnn_cell.BasicLSTMCell(cell_dim)
 
-		        self.cells.append(cell)
+            if self.cell_type == 'BASIC' or self.cell_type == 'GRU':
+                self.cell = tf.nn.rnn_cell.MultiRNNCell([cell] * num_layers, state_is_tuple = False)
+            else:
+                self.cell = tf.nn.rnn_cell.MultiRNNCell([cell] * num_layers)
 
-	        self.cell = tf.nn.rnn_cell.MultiRNNCell(self.cells)
-        rnn_outputs, final_state = tf.nn.dynamic_rnn(self.cell, self.input_data_adj)
+        rnn_outputs, final_state = tf.nn.rnn(self.cell, self.input_data_adj)
 
 
         with tf.variable_scope("output"):
