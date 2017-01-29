@@ -1,6 +1,6 @@
 ###HackCambridge 2017 Project 
 by Dao Zhou, Minxuan Xie, Renqiao Zhang, Qiuying Lai
-![EasyTensor](https://github.com/qlai/EasyTensor/easytensor.png)
+![EasyTensor](https://github.com/qlai/EasyTensor/blob/master/easytensor.png)
 ##EasyTensor: GUI for Simple Models in Tensorflow
 Helping beginners and students to understand the structure of Tensorflow better by providing a GUI where standard neural net models written in Tensorflow (Python) can be generated.
 
