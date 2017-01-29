@@ -39,7 +39,7 @@ if __name__=='__main__':
     # model = base.MultiLayerPerceptron()
 
 
-    log_dir = '/Users/AndyZhang/Cambridge/hack/bins'
+    log_dir = './tmp'
     save_path = log_dir+'/model_temp.ckpt'
     op.train(model, dataset=mnist, NUM_ITERS=200, BATCH_SIZE=100,\
              LOG_DIR=log_dir, KEEP_PROB=1., TEST=True, SAVE_PATH = save_path)

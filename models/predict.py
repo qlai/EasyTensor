@@ -3,6 +3,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import cv2
 import tensorflow as tf
 import argparse
 from tensorflow.examples.tutorials.mnist import input_data
@@ -10,7 +11,6 @@ import utils
 import train as op
 import multilayer_perceptron_output as base
 import numpy as np
-import cv2
 
 
 def predict_by_modelMLP(model_path, test_images):
