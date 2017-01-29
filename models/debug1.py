@@ -5,13 +5,14 @@ from __future__ import print_function
 import tensorflow as tf
 import argparse
 from tensorflow.examples.tutorials.mnist import input_data
-import utils
-import train as op
-import multilayer_perceptron as base
+from utils import *
 import numpy as np
+import train as op
+import convolution_nn as base
+
 
 '''
-Debugging Multilayer_perceptron
+Debugging convolution
 also providing a way of using the libraries
 '''
 
@@ -24,10 +25,13 @@ if __name__=='__main__':
     # loading data object
     mnist = input_data.read_data_sets(FLAGS.data_dir, one_hot=True)
 
-    model = base.MultiLayerPerceptron(input_dim=784, output_dim=10, \
-                                      hidden_dims=[512], activations=['relu', None], \
-                                      learning_rate=0.3, dropout = False, \
-                                      costfunc = utils.cross_entropy, optimizer='GD')
+
+    ###
+    # for ConvNN training, only here, the arguments are changed
+    ###
+    model = base.ConvNN( (28, 28), output_dim=10, hidden_patches=[(5, 5), (5, 5), None],\
+                         hidden_dims=[32, 64, 500], activations= ['relu', 'relu', 'relu'],\
+                         learning_rate=0.1, optimizer='GD' )
 
 
     # model = base.MultiLayerPerceptron()
@@ -43,6 +47,7 @@ if __name__=='__main__':
     print(y[0,:])
     print(np.argmax(y[0,:]))
     print(np.argmax(y[:5,:],1))
+
 
 
 

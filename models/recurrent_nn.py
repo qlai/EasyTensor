@@ -64,8 +64,9 @@ class Recurrent_NN(EstBase):
 	        self.cell = tf.nn.rnn_cell.MultiRNNCell(self.cells)
         rnn_outputs, final_state = tf.nn.dynamic_rnn(self.cell, self.input_data_adj)
 
+
         with tf.variable_scope("output"):
-        	self.output = utils.perceptron(rnn_outputs[-1], self.state_dims[-1], self.output_dim, 'output_layer', act=out_activation)
+            self.output = utils.perceptron(rnn_outputs[-1], self.state_dims[-1], self.output_dim, 'output_layer', act=out_activation)
 
 
         with tf.name_scope('cost'):
