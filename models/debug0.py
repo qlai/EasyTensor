@@ -5,11 +5,15 @@ from __future__ import print_function
 import tensorflow as tf
 import argparse
 from tensorflow.examples.tutorials.mnist import input_data
-from utils import *
+import utils
 import train as op
 import multilayer_perceptron as base
 import numpy as np
 
+'''
+Debugging Multilayer_perceptron
+also providing a way of using the libraries
+'''
 
 if __name__=='__main__':
     parser = argparse.ArgumentParser()
@@ -23,10 +27,11 @@ if __name__=='__main__':
     model = base.MultiLayerPerceptron(input_dim=784, output_dim=10, \
                                       hidden_dims=[512], activations=['relu', None], \
                                       learning_rate=0.3, dropout = False, \
-                                      costfunc = cross_entropy, optimizer='GD')
+                                      costfunc = utils.cross_entropy, optimizer='GD')
 
-    # model.save()
-    # model = load_model()
+
+    # model = base.MultiLayerPerceptron()
+
 
     log_dir = '/Users/AndyZhang/Cambridge/hack/bins'
     save_path = log_dir+'/model_temp.ckpt'
